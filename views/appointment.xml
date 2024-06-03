@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="appointment_form_inherit" model="ir.ui.view">
+            <field name="name">Calender Appointment.form</field>
+            <field name="model">appointment.type</field>
+            <field name="inherit_id" ref="appointment.appointment_type_view_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='left_details']" position="inside">
+                    <field name="product_id" required="1"/>
+                    <field name="max_number"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </xpath>
+                <xpath expr="//field[@name='slot_ids']//tree//field[@name='weekday']" position="after">
+                    <field name="max_number" readonly="0"/>
+                    <field name="available_number" readonly="0"/>
+                    <field name="slot_type"/>
+                </xpath>
+                <xpath expr="//field[@name='location_id']" position="replace">
+                    <field name="location"/>
+                    <field name="city"/>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+         <record id="appointment_tree_inherit" model="ir.ui.view">
+            <field name="name">Calender Appointment.tree</field>
+            <field name="model">appointment.type</field>
+            <field name="inherit_id" ref="appointment.appointment_type_view_tree"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='location_id']" position="replace">
+                    <field name="location"/>
+                    <field name="city"/>
+                     <field name="category"/>
+                </xpath>
+
+            </field>
+         </record>
+    </data>
+</odoo>

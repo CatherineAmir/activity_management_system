@@ -6,7 +6,7 @@ class Activity(models.Model):
     _name = 'activity.slot'
     _description = 'Activity Slots For Reservation'
 
-    slot_configuration_id = fields.Many2one('activity.slot.configuration',required=True)
+    slot_configuration_id = fields.Many2one('',required=True)
     name = fields.Char(compute='_compute_name', string='Name',store=True)
     start_datetime = fields.Datetime(required=True)
     end_datetime = fields.Datetime(required=True)

@@ -4,7 +4,7 @@ from odoo import fields, models, api
 class Product(models.Model):
     _inherit = 'product.template'
 
-    configuration_slot_ids=fields.One2many('activity.slot.configuration', 'product_id')
+    configuration_slot_ids=fields.One2many('appointment.type', 'product_id')
 
     # def _set_default_country(self):
     #     return 65
