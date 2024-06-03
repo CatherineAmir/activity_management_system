@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_slot_configuration,access_slot_configuration.activity_management_system,model_activity_slot_configuration,base.group_user,1,1,1,1
+access_slot_configuration_portal,access_slot_configuration.activity_management_system_portal,model_activity_slot_configuration,,1,0,0,0
+
+access_slot,access_slot,model_activity_slot,base.group_user,1,1,1,1
+access_reservation,access_slot_reservation,model_activity_slot_reservation,base.group_user,1,1,1,1

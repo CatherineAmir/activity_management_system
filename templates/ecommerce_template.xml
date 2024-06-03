@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    <data>-->
+    <template id="activity_property_template" inherit_id="website_sale.product">
+        <xpath expr="//t[@t-set='navClass']" position="before">
+
+            <!--            <t t-set="head">-->
+
+
+
+            <script src="https://kit.fontawesome.com/6de43f2971.js" crossorigin="anonymous"/>
+        </xpath>
+
+
+        <xpath expr="//p[@t-field='product.description_sale']" position="after">
+            <div class="row">
+
+
+                <div class="col-xs-6 col-lg-3 col-md-6">
+                    <div class="item">
+
+                        <div class="info">
+
+                            <h4 class="name">
+                                <i class="fa-regular fa-clock"/>
+                               <span style="width:1px;"/> Duration
+                            </h4>
+                            <p class="value">
+                                <span t-field="product.configuration_slot_ids[0].duration"/>
+                                <span t-field="product.configuration_slot_ids[0].time_interval"/>
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-lg-3 col-md-6">
+                    <div class="item">
+
+                        <div class="info">
+                            <h4 class="name"><i class="fa-solid fa-umbrella-beach"/>
+                                <span style="width:1px;"/>Tour Type
+                            </h4>
+                            <p class="value">
+                                Ecotourism
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-lg-3 col-md-6">
+                    <div class="item">
+
+                        <div class="info">
+                            <h4 class="name"><i class="fa-solid fa-user-group"></i>
+                               <span style="width:1px;"/>Group Size
+                            </h4>
+                            <p class="value">
+                                <span t-field="product.configuration_slot_ids[0].duration"/>
+                                <span>Persons</span>
+
+
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-lg-3 col-md-6">
+                    <div class="item">
+
+                        <div class="info">
+                            <h4 class="name">
+
+                                <i class="fa-solid fa-location-dot"/>
+                                <span style="width:2px;"/>
+                                Location
+                            </h4>
+                            <p class="value">
+                               <t t-esc="product.city"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </xpath>
+
+    </template>
+
+
+    <!--    </data>-->
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="slot_configuration_form_inherit" model="ir.ui.view">
+            <field name="name">Slot.Configuration.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//page[@name='general_information']" position="after">
+                   <page name="Slots Configurations">
+                       <group>
+                           <group>
+                           <field name="city"/>
+                           <field name="location"/>
+
+                           </group>
+
+
+                       </group>
+                       <group string="Configuration Slots" col="1">
+
+                            <field name="configuration_slot_ids" nolabel="1"/>
+                       </group>
+
+
+                   </page>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

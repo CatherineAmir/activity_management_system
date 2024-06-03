@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="activity_slot_configuration_form_view" model="ir.ui.view">
+            <field name="name">activity.slot.configuration.form</field>
+            <field name="model">activity.slot.configuration</field>
+            <field name="arch" type="xml">
+                <form string="Slot Configuration">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Title" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="product_id" readonly="1"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                 <field name="start_time" widget="float_time"/>
+                                <field name="end_time" widget="float_time"/>
+                                 <label for="duration"/>
+                    <div class="oe_inline">
+                        <field name="duration"/>
+                        <field name="time_interval"/>
+
+
+                    </div>
+                            </group>
+                            <group>
+                                <label for="interval_number" string="Repeat Every"/>
+                                <div>
+                                    <field name="interval_number" class="oe_inline" required="1"/>
+                                    <field name="interval_type" class="oe_inline" required="1"/>
+                                </div>
+
+                                <field name="max_number"/>
+
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="activity_slot_configuration_tree_view" model="ir.ui.view">
+            <field name="name">activity.slot.configuration.tree</field>
+            <field name="model">activity.slot.configuration</field>
+            <field name="arch" type="xml">
+                <tree string="Slots configurations">
+                    <field name="name" readonly="1"/>
+                    <field name="product_id" readonly="1"/>
+
+                    <field name="start_date"/>
+
+                    <field name="end_date"/>
+
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="interval_number"/>
+                    <field name="interval_type"/>
+
+                    <field name="max_number"/>
+
+                    <field name="duration"/>
+                    <field name="time_interval"/>
+                </tree>
+            </field>
+        </record>
+
+<!--        <record id="ModelName_search_view" model="ir.ui.view">-->
+<!--            <field name="name">ProjectName.ModelName.search</field>-->
+<!--            <field name="model">ProjectName.ModelName</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <search string="ModelTitle">-->
+<!--                    <group expand="1" string="Group By">-->
+<!--                        <filter string="Example Field" name="example_field" domain="[]"-->
+<!--                                context="{'group_by':'example_field'}"/>-->
+<!--                    </group>-->
+<!--                </search>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="ModelName_act_window" model="ir.actions.act_window">-->
+<!--            <field name="name">ModelTitle</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">ProjectName.ModelName</field>-->
+<!--            <field name="view_type">form</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="oe_view_nocontent_create">-->
+<!--                    There is no examples click here to add new ModelTitle.-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <menuitem name="ModelTitle" id="ModelName_menu" parent="your_root_menu" action="ModelName_act_window"/>-->
+
+    </data>
+</odoo>
