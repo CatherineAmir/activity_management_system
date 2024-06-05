@@ -6,14 +6,14 @@
                 <div class="container mb64 o_appointment">
                     <h1 class="o_page_header mt32">
                         <t t-set="title_user_name" t-value="user_selected.name or user_default.name"/>
-                        Schedule <span class="text-primary" t-out="appointment_type.name"/>
+                        Book <span class="text-primary" t-out="appointment_type.name"/>
 <!--                        <span t-if="hide_select_dropdown and title_user_name and not title_user_name in appointment_type.name">-->
 <!--                            with <span class="text-primary" t-out="title_user_name"/>-->
 <!--                        </span>-->
                     </h1>
                     <div t-if="state == 'failed-staff-user'" class="alert alert-danger mt16" role="alert">
                         <p>
-                            <strong>Appointment failed!</strong>
+                            <strong>Activity Booking failed!</strong>
                             The selected timeslot is not available anymore.
                             Someone has booked the same time slot a few
                             seconds before you.
@@ -24,7 +24,7 @@
                     </div>
                     <div t-if="state == 'failed-partner'" class="alert alert-danger mt16" role="alert">
                         <p>
-                            <strong>Appointment failed!</strong>
+                            <strong>Activity failed!</strong>
                             The selected timeslot is not available.
                             It appears you already have another meeting with us at that date.
                         </p>
@@ -34,8 +34,8 @@
                     </div>
                     <div t-if="state == 'cancel'" class="alert alert-danger mt16" role="alert">
                         <p class="mb-0">
-                            <strong>Appointment canceled!</strong>
-                            You can schedule another appointment from here.
+                            <strong>Activity Booking is  canceled!</strong>
+                            You can Book another Activity from here.
                         </p>
                     </div>
                     <div class="clearfix"/>
@@ -45,10 +45,10 @@
                         <div t-if="no_users or no_slots" class="col-12 o_appointment_missing_configuration d-none">
                             <div class="alert alert-info rounded-0 mb-3 o_not_editable" groups="appointment.group_appointment_manager">
                                 <t t-if="no_users and no_slots">
-                                    This appointment type has no availabilities because it has no staff assigned and does not have any opening hours configured
+                                    This activity type has no availabilities because it has no staff assigned and does not have any opening hours configured
                                 </t>
                                 <t t-elif="no_users">
-                                    This appointment type has no availabilities because it has no staff assigned
+                                    This activity type has no availabilities because it has no staff assigned
                                 </t>
                                 <t t-elif="no_slots">
                                     This appointment type has no availabilities because it does not have any opening hours configured
@@ -108,11 +108,31 @@
                         </div>
                         <div class="o_appointment_no_slot_overall_helper col-12"/>
                     </div>
-                    <div class="oe_structure oe_empty" data-editor-message="DROP BUILDING BLOCKS HERE TO MAKE THEM AVAILABLE ACROSS ALL APPOINTMENTS"/>
+                    <div class="oe_structure oe_empty" data-editor-message="DROP BUILDING BLOCKS HERE TO MAKE THEM AVAILABLE ACROSS ALL Activities"/>
                 </div>
 
             </xpath>
 
+
+
+        </template>
+
+        <template id="activity_website_info" inherit_id="website_appointment.appointment_info">
+             <xpath expr="//nav[hasclass('o_wappointment_navbar')]" position="replace">
+               <nav class="o_wappointment_navbar navbar border-top shadow-sm d-print-none py-0">
+                <div class="container">
+                    <a t-if="appointment_type.category == 'website' and len(available_appointments) != 1"
+                       class="o_wappointment_navbar_link navbar-brand btn px-0 h4 my-0 me-auto"
+                       t-attf-href="/appointment?#{keep_query('filter_appointment_type_ids', 'filter_staff_user_ids', 'invite_token')}">
+                        <i class="fa fa-long-arrow-left me-2"/>All Activities
+                    </a>
+                        <t t-call="website_appointment.appointment_progress_bar">
+                            <t t-set="step" t-value="20"/>
+                        </t>
+                </div>
+            </nav>
+
+            </xpath>
         </template>
 
 
@@ -145,6 +165,308 @@
 
             </xpath>
         </template>
+
+        <template id="activity_card_appointment" inherit_id="website_appointment.appointments_cards">
+            <xpath expr="//h1[hasclass('o_page_header')]" position="replace">
+                <h1 class="o_page_header mb32 mt32">Book an Activity</h1>
+            </xpath>
+
+            <xpath expr="//div[@t-if='not appointment_types']" position="replace">
+                 <div t-if="not appointment_types" class="col-12 o_appointment_not_found">
+            <h2 class="mt32 mb-3 d-none">No Activity found.</h2>
+            <div class="alert alert-info text-center d-none" groups="appointment.group_appointment_manager">
+                <p class="m-0">Use the top button '<b>+ New</b>' to create an Activity type.</p>
+            </div>
+            <div class="o_appointment_svg mx-auto text-center py-5 w-75">
+                <i class="mx-auto h3 fa fa-spinner fa-spin"/>
+            </div>
+        </div>
+            </xpath>
+
+            <xpath expr="//main[hasclass('card-body')]" position="replace">
+                <main class="card-body d-flex flex-column">
+                        <h2 t-attf-class="fw-bold my-3">
+                            <span t-field="appointment.name" itemprop="name"/>
+                        </h2>
+                        <div class="text-muted flex-fill">
+                            <span t-field="appointment.message_intro" itemprop="message_intro"
+                                    placeholder="Add an intro message here..."/>
+                        </div>
+<!--                        <div t-if="appointment.assign_method != 'random'" class="o_wappointment_card_staff_users lh-lg d-flex">-->
+<!--                            <t t-if="len(appointment.staff_user_ids)" t-call="website_appointment.appointment_staff_users_description"/>-->
+<!--                        </div>-->
+                        <div itemprop="duration" class="o_wappointment_card_location mt-2 mb-4 d-flex">
+                            <i class="fa fa-clock-o text-center text-muted fs-5 me-2"/>
+                            <span t-if="appointment.appointment_duration" t-field="appointment.appointment_duration">
+
+                            </span>
+                            <span style="width:5px;"></span>
+                            <span> Hours</span>
+<!--                            <span t-else="" class="o_not_editable">Online</span>-->
+                        </div>
+                        <div itemprop="location" class="o_wappointment_card_location mt-3 mb-5 d-flex">
+                            <i class="fa fa-map-marker text-center text-muted fs-5 me-2"/>
+                            <span t-if="appointment.city" t-field="appointment.city"/>
+<!--                            <span t-else="" class="o_not_editable">Online</span>-->
+                        </div>
+                        <div class="navbar-brand fw-bold text-primary text-uppercase h5 me-auto position-absolute w-100">
+                            View availability <i class="fa fa-arrow-right"/>
+                        </div>
+                    </main>
+            </xpath>
+        </template>
+
+<!--        Top Bar-->
+        <template id="activity_calendar_topbar" inherit_id="website_appointment.website_calendar_index_topbar">
+            <xpath expr="//span[hasclass('navbar-brand')]" position="replace">
+                 <span class="navbar-brand h4 my-0 me-auto my-auto">Choose Your Activity</span>
+            </xpath>
+
+            <xpath expr="//t[@t-set='placeholder']" position="replace">
+                <t t-set="placeholder">Search an activity...</t>
+            </xpath>
+        </template>
+
+<template id="activity_selector" inherit_id="website_appointment.appointment_select_operator">
+    <xpath expr="//nav[hasclass('o_wappointment_navbar')]" position="replace">
+         <nav t-if="appointment_type.category == 'website'" class="o_wappointment_navbar navbar border-top shadow-sm d-print-none py-0">
+                    <div class="container">
+                        <a t-if="len(available_appointments) != 1" class="o_wappointment_navbar_link navbar-brand btn px-0 h4 my-0 me-auto"
+                            t-attf-href="/appointment?#{keep_query('filter_appointment_type_ids', 'filter_staff_user_ids', 'invite_token')}">
+                            <i class="fa fa-long-arrow-left me-2"/>All Activities
+                        </a>
+                        <t t-call="website_appointment.appointment_progress_bar">
+                            <t t-set="step" t-value="10"/>
+                        </t>
+                    </div>
+                </nav>
+    </xpath>
+
+</template>
+
+        <template id="activity_registration" inherit_id="appointment.appointment_form">
+
+           <xpath expr="//nav[hasclass('o_wappointment_navbar')]" position="replace">
+                <nav class="o_wappointment_navbar navbar border-top shadow-sm d-print-none py-0">
+                <div class="container">
+                    <a t-if="appointment_type.category == 'website' and len(available_appointments) != 1"
+                       class="o_wappointment_navbar_link navbar-brand btn px-0 h4 my-0 me-auto"
+                       t-attf-href="/appointment?#{keep_query('filter_appointment_type_ids', 'filter_staff_user_ids', 'invite_token')}">
+                        <i class="fa fa-long-arrow-left me-2"/>All Activities
+                    </a>
+                        <t t-call="website_appointment.appointment_progress_bar">
+                            <t t-set="step" t-value="30"/>
+                        </t>
+                </div>
+            </nav>
+           </xpath>
+
+            <xpath expr="//div[hasclass('o_appointment_attendee_form_details')]" position="replace">
+                <div class="o_appointment_attendee_form_details">
+                                    <div class="d-flex pt-3 fs-6 lh-lg">
+                                        <i class="fa fa-calendar o_appointment_fa_width text-center fs-5 me-2"/>
+                                        <span class="lh-base">
+                                            <t t-out="date_locale"/> at <t t-out="time_locale"/><br/>
+                                            <span class="text-muted"> (<t t-out="request.session.get('timezone') or appointment_type.appointment_tz"/>)</span>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex fs-6 lh-lg pt-1">
+                                        <i class="fa fa-clock-o o_appointment_fa_width text-center fs-5 me-2 mt-1"/>
+                                        <span t-out="duration" t-options="{'widget': 'duration', 'unit': 'hour', 'round': 'minute'}"/>
+                                    </div>
+                                    <div class="d-flex pt-1 fs-6 lh-lg">
+                                        <i class="fa fa-map-marker o_appointment_fa_width text-center fs-5 me-2 mt-1"/>
+                                        <span t-if="appointment_type.city">
+                                            <div t-att-class="str(appointment_type.city).strip() and 'fw-bold' or ''"
+                                                t-field="appointment_type.city"/>
+<!--                                                t-options="{'widget': 'contact', 'fields': ['name']}"/>-->
+<!--                                            <div class="lh-base"-->
+<!--                                                t-field="appointment_type.city"/>-->
+<!--                                                t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': true}"/>-->
+                                        </span>
+<!--                                        <span t-else="" class="o_not_editable">Online</span>-->
+                                    </div>
+                                </div>
+            </xpath>
+
+            <xpath expr="//button[@type='submit']" position="replace">
+                <button type="submit" class="btn btn-primary">Confirm Activity</button>
+
+            </xpath>
+        </template>
+<!--        Validation Template-->
+        <template id="activity_validation" inherit_id="appointment.appointment_validated">
+            <xpath expr="//h1" position="replace">
+                 <h1 class="o_page_header mt32">
+                        <t t-if="appointment_type">
+                            <span class="text-primary" t-out="appointment_type.name"/> Activity Reservation
+                            <span t-if="staff_user and staff_user.name not in appointment_type.name"/>
+<!--                                with <span class="text-primary" t-out="staff_user.name"/> </span>-->
+                        </t>
+<!--                        <t t-else="">-->
+<!--                            <span class="text-primary" t-out="event.name"/>-->
+<!--                            <span t-if="staff_user and staff_user.name not in event.name"> with <span class="text-primary" t-out="staff_user.name"/> </span>-->
+<!--                        </t>-->
+                    </h1>
+
+
+
+
+            </xpath>
+
+            <xpath expr="//div[hasclass('o_appointment_validation_details')]" position="replace">
+                <div class="o_appointment_validation_details row justify-content-between pt-3 mb48">
+                        <div t-attf-class="col-12 o_not_editable {{'col-md-8 pe-md-4 pe-lg-5' if staff_user else ''}}">
+                            <div class="alert alert-info pb16" t-if="state == 'new'" role="status">
+                                <p class="mb-0">
+                                    <strong>Your Activity has been successfully booked!</strong>
+                                    <a groups="appointment.group_appointment_manager"
+                                       t-attf-href="/web#id=#{event.appointment_type_id.id}&amp;view_type=form&amp;model=appointment.type&amp;action=appointment.appointment_type_action">
+                                        <span class="text-nowrap"><i class="fa fa-arrow-right mx-2"/>Back to edit mode</span>
+                                    </a>
+                                    <br/>
+                                </p>
+                            </div>
+                            <div class="alert alert-danger pb16" t-if="state == 'no-cancel'" role="alert">
+                                <p class="mb-0">
+                                    <strong>Your Activity is in less than <t t-out="appointment_type.min_cancellation_hours"/> hours from now!</strong>
+                                    It's too late to cancel online, please contact the attendees another way if you really can't make it.
+                                </p>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                                    <label>When:</label>
+                                </div>
+                                <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                                    <t t-out="datetime_start"/>
+                                    <i class="text-muted text-xs-nowrap">(timezone: <t t-out="request.session.timezone"/>)</i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                                    <label>Duration:</label>
+                                </div>
+                                <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                                    <t t-out="event.duration" t-options="{'widget': 'duration', 'unit': 'hour', 'round': 'minute'}"/>
+                                </div>
+                            </div>
+<!--                            <div t-if="event.videocall_location" class="row">-->
+<!--                                <div class="col-4 col-sm-3 col-xl-2 pe-0">-->
+<!--                                    <label class="form-label">How to Join:</label>-->
+<!--                                </div>-->
+<!--                                <div class="o_pt_2_px col-8 col-sm-9 col-xl-10 text-break">-->
+<!--                                    <label>-->
+<!--                                        <t t-if="event.get_base_url() in event.videocall_location"> Join with Odoo Discuss</t>-->
+<!--                                        <t t-else=""> Join at</t>-->
+<!--                                    </label><br/>-->
+<!--                                    <a t-att-href="event.videocall_location" target="_blank" t-out="event.videocall_location"/>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <div class="row">
+                                <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                                    <label>Location:</label>
+                                </div>
+                                <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                                    <span t-if="appointment_type and appointment_type.city">
+                                        <div t-att-class="str(appointment_type.city).strip() and 'fw-bold' or ''"
+                                             t-field="appointment_type.city" />
+<!--                                             t-options="{'widget': 'contact', 'fields': ['name']}"/>-->
+<!--                                        <div t-field="appointment_type.location_id" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': true}"/>-->
+                                    </span>
+<!--                                    <t t-else="">-->
+<!--                                        <t t-if="event.location" t-out="event.location"/>-->
+<!--                                        <t t-else="" ><span>Online</span></t>-->
+<!--                                    </t>-->
+                                </div>
+                            </div>
+<!--                            <div class="row">-->
+<!--                                <div class="col-4 col-sm-3 col-xl-2 pe-0">-->
+<!--                                    <label>Attendees:</label>-->
+<!--                                </div>-->
+<!--                                <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">-->
+<!--                                    <div t-foreach="event.attendee_ids" t-as="attendee">-->
+<!--                                        <t t-out="attendee.common_name"/>-->
+<!--                                        <span t-if="attendee.state == 'accepted'" class="fa fa-check text-success" title="Confirmed" role="img" aria-label="Confirmed"/>-->
+<!--                                        <span t-if="attendee.state == 'declined'" class="fa fa-times text-danger" title="Declined" role="img" aria-label="Declined"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <div t-if="not is_html_empty(event.description)" class="row">
+                                <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                                    <label>Details:</label>
+                                </div>
+                                <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                                    <div t-field="event.description"/>
+                                </div>
+                            </div>
+                            <div t-if="appointment_type" t-out="appointment_type.message_confirmation" class="mt-4"/>
+                        </div>
+                        <div t-if="staff_user" class="col-12 col-md-4">
+                            <article class="card o_appointment_user_short_card border-1 shadow-sm" itemscope="itemscope" itemtype="http://schema.org/Employee">
+                                <header t-if="appointment_type.avatars_display == 'show'" class="overflow-hidden bg-secondary rounded-top">
+                                    <img t-attf-src="/appointment/#{appointment_type.id}/avatar?user_id=#{staff_user.id}"
+                                         class="w-100 h-100 o_object_fit_cover o_appointment_avatar_background"/>
+                                </header>
+                                <main class="card-body">
+                                    <h2 class="mb-0" t-out="staff_user.name"/>
+                                    <div class="o_appointment_card_user_fct text-black-50 h6">
+                                        <div t-field="staff_user.partner_id.function" placeholder="Add a function here..."/>
+                                    </div>
+                                    <div t-if="staff_user.email" class="fs-6 lh-lg d-flex">
+                                        <i class="fa fa-envelope o_appointment_fa_width text-center fs-5 me-2 pt-1"/>
+                                        <span class="overflow-auto"><t t-out="staff_user.email"/></span>
+                                    </div>
+                                    <div t-if="staff_user.partner_id.phone" class="fs-6 lh-lg d-flex">
+                                        <i class="fa fa-phone o_appointment_fa_width text-center fs-5 me-2 pt-1"/>
+                                        <t t-out="staff_user.partner_id.phone"/>
+                                    </div>
+                                </main>
+                            </article>
+                        </div>
+                    </div>
+            </xpath>
+            <xpath expr="//div[hasclass('o_appointment_validation_bottom_btns')]" position="replace">
+
+            </xpath>
+            <xpath expr="//main[hasclass('card-body')]" position="replace">
+
+            </xpath>
+        </template>
+
+
+
+
+        <template id="website_activity_validation" inherit_id="website_appointment.appointment_validated">
+            <xpath expr="//div[hasclass('container')]" position="replace">
+                <div class="container">
+                    <t t-set="all_appointments_url" t-value="'/appointment?' + keep_query('filter_appointment_type_ids', 'filter_staff_user_ids')"/>
+                    <t t-set="invite_redirect_url" t-value="event.appointment_invite_id.redirect_url if event.appointment_invite_id else None"/>
+                    <a t-att-href="invite_redirect_url or all_appointments_url" class="o_wappointment_navbar_link navbar-brand btn px-0 h4 my-0 me-auto">
+                        <i class="fa fa-long-arrow-left me-2"/>
+                        <t t-if="invite_redirect_url">Book Another Activity</t>
+                        <t t-else="">All Activities</t>
+                    </a>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="website_activity_form" inherit_id="website_appointment.appointment_form">
+            <xpath expr="//nav[hasclass('o_wappointment_navbar')]" position="replace">
+                <nav class="o_wappointment_navbar navbar border-top shadow-sm d-print-none py-0">
+                <div class="container">
+                    <a t-if="appointment_type.category == 'website' and len(available_appointments) != 1"
+                       class="o_wappointment_navbar_link navbar-brand btn px-0 h4 my-0 me-auto"
+                       t-attf-href="/appointment?#{keep_query('filter_appointment_type_ids', 'filter_staff_user_ids', 'invite_token')}">
+                        <i class="fa fa-long-arrow-left me-2"/>All Activities
+                    </a>
+                        <t t-call="website_appointment.appointment_progress_bar">
+                            <t t-set="step" t-value="30"/>
+                        </t>
+                </div>
+            </nav>
+            </xpath>
+        </template>
+
 
     </data>
 </odoo>
