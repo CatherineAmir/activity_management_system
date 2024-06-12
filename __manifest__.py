@@ -34,7 +34,9 @@
         'views/appointment.xml',
         'views/reservation_event.xml',
         'templates/main_appointment_template.xml',
-
+        'templates/portal_my_appointments.xml',
+        'templates/footer.xml',
+        'templates/remove_e_commerce_footer.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

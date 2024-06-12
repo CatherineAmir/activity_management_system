@@ -15,6 +15,7 @@
                     <field name="end_date"/>
                     <field name="assign_method"/>
                     <field name="message_intro"/>
+                    <field name="website_meta_og_img"/>
                 </xpath>
                 <xpath expr="//field[@name='slot_ids']//tree//field[@name='weekday']" position="after">
                     <field name="max_number" readonly="0"/>

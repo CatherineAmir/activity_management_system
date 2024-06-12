@@ -167,6 +167,48 @@
         </template>
 
         <template id="activity_card_appointment" inherit_id="website_appointment.appointments_cards">
+            <xpath expr="//header" position="replace">
+                <header class="overflow-hidden bg-secondary rounded-top col-12">
+<!--                        <div class="d-block h-100 w-100">-->
+<!--                            <t t-call="website.record_cover">-->
+<!--                                <t t-set="_record" t-value="appointment"/>-->
+<!--                                <small t-if="not appointment.website_published" class="o_appointment_unpublished bg-danger position-absolute w-100 text-end" groups="base.group_user">-->
+<!--                                    <i class="fa fa-ban me-2"/>Unpublished-->
+<!--                                </small>-->
+<!--                            </t>-->
+<!--                        </div>-->
+
+                    <div class="card-img-d">
+                    <t t-if="appointment.product_id.image_1920">
+
+
+
+
+
+
+                  <img style="width:1000px; height:500px;object-fit: cover;" class="img-fluid img-center"
+
+                    t-attf-src="data:image/*;base64,{{appointment.product_id.image_1920}}"
+                    alt=""
+
+                  />
+                    </t>
+                    </div>
+
+
+                    </header>
+
+            </xpath>
+
+
+
+
+
+
+
+
+
+
             <xpath expr="//h1[hasclass('o_page_header')]" position="replace">
                 <h1 class="o_page_header mb32 mt32">Book an Activity</h1>
             </xpath>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <template id="brand_promotion_sita" inherit_id="website_sale.brand_promotion" name="Sita Promotion">
+    <xpath expr="//t[@t-set='_message']" position="replace">
+            <t t-set="_message">
+                 <a target="_blank" href="https://sita-eg.com">Create website</a>
+            </t>
+
+    </xpath>
+</template>
+
+
+    </data>
+</odoo>
